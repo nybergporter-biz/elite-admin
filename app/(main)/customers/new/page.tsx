@@ -11,9 +11,15 @@ export default function NewCustomerPage() {
   const handleSubmit = async (data: any) => {
     setIsLoading(true);
     try {
+      const session = localStorage.getItem('supabase.auth.token');
+      const token = session ? JSON.parse(session).access_token : '';
+
       const res = await fetch('/api/customers', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
         body: JSON.stringify(data),
       });
       const { success } = await res.json();
