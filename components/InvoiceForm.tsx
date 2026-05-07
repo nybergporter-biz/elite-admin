@@ -9,14 +9,32 @@ interface InvoiceFormProps {
   isLoading?: boolean;
 }
 
+interface FormData {
+  customer_id: string;
+  job_id: string;
+  amount: string | number;
+  tax: string | number;
+  total: number;
+  status: string;
+  notes: string;
+}
+
 export default function InvoiceForm({ initialData, onSubmit, isLoading }: InvoiceFormProps) {
-  const [formData, setFormData] = useState(
-    initialData || {
+  const [formData, setFormData] = useState<FormData>(
+    initialData ? {
+      customer_id: initialData.customer_id,
+      job_id: initialData.job_id || '',
+      amount: initialData.amount,
+      tax: initialData.tax,
+      total: initialData.total,
+      status: initialData.status,
+      notes: initialData.notes || '',
+    } : {
       customer_id: '',
       job_id: '',
       amount: '',
       tax: '',
-      total: '',
+      total: 0,
       status: 'draft',
       notes: '',
     }
@@ -25,10 +43,10 @@ export default function InvoiceForm({ initialData, onSubmit, isLoading }: Invoic
 
   // Calculate total when amount or tax changes
   useEffect(() => {
-    const amount = parseFloat(formData.amount) || 0;
-    const tax = parseFloat(formData.tax) || 0;
-    const total = (amount + tax).toFixed(2);
-    setFormData((prev) => ({ ...prev, total: total }));
+    const amount = parseFloat(String(formData.amount)) || 0;
+    const tax = parseFloat(String(formData.tax)) || 0;
+    const total = parseFloat((amount + tax).toFixed(2));
+    setFormData((prev) => ({ ...prev, total }));
   }, [formData.amount, formData.tax]);
 
   const handleSubmit = async (e: React.FormEvent) => {

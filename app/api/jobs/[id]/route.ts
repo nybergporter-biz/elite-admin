@@ -4,10 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const job = await getJobById(params.id);
+    const job = await getJobById(id);
     return NextResponse.json({ success: true, data: { job } });
   } catch (error) {
     return NextResponse.json(
@@ -19,8 +20,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await request.json();
 
@@ -34,7 +36,7 @@ export async function PUT(
       }
     }
 
-    const job = await updateJob(params.id, body);
+    const job = await updateJob(id, body);
     return NextResponse.json({ success: true, data: { job } });
   } catch (error) {
     return NextResponse.json(
@@ -46,10 +48,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    await deleteJob(params.id);
+    await deleteJob(id);
     return NextResponse.json({ success: true, data: {} });
   } catch (error) {
     return NextResponse.json(

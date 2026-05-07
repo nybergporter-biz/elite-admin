@@ -9,9 +9,29 @@ interface JobFormProps {
   isLoading?: boolean;
 }
 
+interface FormData {
+  customer_id: string;
+  service_type: string;
+  status: string;
+  quoted_price: string | number;
+  actual_price: string | number;
+  scheduled_date: string;
+  completed_date: string;
+  notes: string;
+}
+
 export default function JobForm({ initialData, onSubmit, isLoading }: JobFormProps) {
-  const [formData, setFormData] = useState(
-    initialData || {
+  const [formData, setFormData] = useState<FormData>(
+    initialData ? {
+      customer_id: initialData.customer_id,
+      service_type: initialData.service_type,
+      status: initialData.status,
+      quoted_price: initialData.quoted_price,
+      actual_price: initialData.actual_price || '',
+      scheduled_date: initialData.scheduled_date || '',
+      completed_date: initialData.completed_date || '',
+      notes: initialData.notes || '',
+    } : {
       customer_id: '',
       service_type: '',
       status: 'quoted',

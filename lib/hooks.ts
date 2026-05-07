@@ -32,7 +32,7 @@ export function useAuth() {
 }
 
 export function useCustomers() {
-  const [customers, setCustomers] = useState([]);
+  const [customers, setCustomers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
