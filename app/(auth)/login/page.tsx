@@ -52,7 +52,15 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/');
+      // Store session in localStorage for AuthGuard to detect
+      if (data.data?.session) {
+        localStorage.setItem('supabase.auth.token', JSON.stringify(data.data.session));
+      }
+
+      // Wait a moment for localStorage to be written, then redirect
+      setTimeout(() => {
+        router.push('/');
+      }, 100);
     } catch (err) {
       setError('An error occurred. Please try again.');
     } finally {
